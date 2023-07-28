@@ -109,3 +109,25 @@ test("That placement location should be within 10x10 grid", () => {
     gameboard.placeShip(ship, location);
   }).toThrow();
 });
+
+test("That no ships can be placed on top of each other", () => {
+  const ship1 = shipFactory(3);
+  const ship2 = shipFactory(3);
+  const gameboard = gameboardFactory();
+
+  const location1 = [
+    [1, 1],
+    [1, 3],
+  ];
+
+  const location2 = [
+    [1, 1],
+    [3, 1],
+  ];
+
+  gameboard.placeShip(ship1, location1);
+
+  expect(() => {
+    gameboard.placeShip(ship2, location2);
+  }).toThrow();
+});
