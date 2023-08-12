@@ -5,7 +5,4 @@ import gameboardFactory from "./gameboard";
 const ship = shipFactory(3);
 const gameboard = gameboardFactory();
 
-gameboard.placeShip(ship, [
-  [1, 1],
-  [1, 3],
-]);
+gameboard.placeShip(ship, [1, 1], "horizontal");
