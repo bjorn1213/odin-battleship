@@ -83,6 +83,8 @@ export default function gameboardFactory() {
   }
 
   function placeShip(ship, location, orientation) {
+    // location is the left top square on which the ship should be placed.
+    // orientation indicates whether the rest of the ship extends right or down.
     validateShipPlacement(ship, location, orientation);
 
     const coordinates = getAllCoordinates(
