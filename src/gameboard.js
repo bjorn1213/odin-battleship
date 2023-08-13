@@ -119,8 +119,10 @@ export default function gameboardFactory() {
     }
     receivedAttacks.push(coordinates);
 
-    const ship = placements[coordinates];
-    ship.hit();
+    if (placements[coordinates]) {
+      const ship = placements[coordinates];
+      ship.hit();
+    }
   }
 
   return { placeShip, receiveAttack, coordinateHasBeenAttacked };
