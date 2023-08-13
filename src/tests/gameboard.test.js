@@ -79,3 +79,30 @@ test("That no ships can be placed on top of each other", () => {
     gameboard.placeShip(ship2, location2, orientation2);
   }).toThrow();
 });
+
+test("That the gameboard registers a ship hit", () => {
+  const ship = shipFactory(4);
+  const gameboard = gameboardFactory();
+
+  const location = [5, 5];
+  const orientation = "horizontal";
+
+  gameboard.placeShip(ship, location, orientation);
+  gameboard.receiveAttack([5, 5]);
+
+  expect(ship.getHits()).toBe(1);
+});
+
+test("That the gameboard prevents a double hit", () => {
+  const ship = shipFactory(4);
+  const gameboard = gameboardFactory();
+
+  const location = [5, 5];
+  const orientation = "horizontal";
+
+  gameboard.placeShip(ship, location, orientation);
+  gameboard.receiveAttack([5, 5]);
+  gameboard.receiveAttack([5, 5]);
+
+  expect(ship.getHits()).toBe(1);
+});

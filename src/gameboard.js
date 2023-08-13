@@ -1,34 +1,21 @@
 export default function gameboardFactory() {
   let occupiedCoordinates = [];
   let placements = {};
+  let receivedAttacks = [];
   const HORIZONTAL = "horizontal";
   const VERTICAL = "vertical";
   const validOrientations = [HORIZONTAL, VERTICAL];
 
-  // placement validators
-  function validCoordinate(coordinates) {
-    for (let coordinate of coordinates) {
-      if (coordinate < 1 || coordinate > 10) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function placementWithinGrid(shipLength, location, orientation) {
-    const endLocation =
-      orientation === HORIZONTAL
-        ? [location[0] + shipLength, location[1]]
-        : [location[0], location[1] - shipLength];
-    return validCoordinate(location) && validCoordinate(endLocation);
+  // utility
+  function getEndLocation(shipLength, location, orientation) {
+    return orientation === HORIZONTAL
+      ? [location[0] + shipLength, location[1]]
+      : [location[0], location[1] - shipLength];
   }
 
   function getAllCoordinates(shipLength, location, orientation) {
     const start = location;
-    const stop =
-      orientation === HORIZONTAL
-        ? [location[0] + shipLength, location[1]]
-        : [location[0], location[1] - shipLength];
+    const stop = getEndLocation(shipLength, location, orientation);
     let coordinates = [];
 
     if (orientation === VERTICAL) {
@@ -49,6 +36,31 @@ export default function gameboardFactory() {
     }
 
     return coordinates;
+  }
+
+  function coordinateHasBeenAttacked(coordinates) {
+    const x = coordinates[0];
+    const y = coordinates[1];
+
+    for (let attack of receivedAttacks) {
+      if (attack[0] === x && attack[1] === y) return true;
+    }
+    return false;
+  }
+
+  // placement validators
+  function validCoordinate(coordinates) {
+    for (let coordinate of coordinates) {
+      if (coordinate < 1 || coordinate > 10) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function placementWithinGrid(shipLength, location, orientation) {
+    const endLocation = getEndLocation(shipLength, location, orientation);
+    return validCoordinate(location) && validCoordinate(endLocation);
   }
 
   function locationIsNotOccupied(shipLength, location, orientation) {
@@ -98,5 +110,18 @@ export default function gameboardFactory() {
     }
   }
 
-  return { placeShip };
+  function receiveAttack(coordinates) {
+    if (
+      coordinateHasBeenAttacked(coordinates) ||
+      !validCoordinate(coordinates)
+    ) {
+      return;
+    }
+    receivedAttacks.push(coordinates);
+
+    const ship = placements[coordinates];
+    ship.hit();
+  }
+
+  return { placeShip, receiveAttack, coordinateHasBeenAttacked };
 }
