@@ -7,104 +7,108 @@ test("That gameboard is defined", () => {
   expect(gameboard).toBeDefined();
 });
 
-test("That gameboard can place ship on board", () => {
-  const ship = shipFactory(3);
-  const gameboard = gameboardFactory();
+describe("Ship placement on gameboard", () => {
+  test("That gameboard can place ship on board", () => {
+    const ship = shipFactory(3);
+    const gameboard = gameboardFactory();
 
-  gameboard.placeShip(ship, [1, 1], "horizontal");
+    gameboard.placeShip(ship, [1, 1], "horizontal");
+  });
+
+  test("That placement location should be horizontal or vertical", () => {
+    const ship = shipFactory(3);
+    const gameboard = gameboardFactory();
+    let location = [3, 1];
+
+    let orientation = "not horizontal"; // invalid orientation
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).toThrow();
+
+    orientation = "verticaal"; // typo
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).toThrow();
+
+    orientation = "horizontal";
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).not.toThrow();
+  });
+
+  test("That placement location should be within 10x10 grid", () => {
+    const ship = shipFactory(3);
+    const gameboard = gameboardFactory();
+    let location = [0, 1];
+    let orientation = "horizontal";
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).toThrow();
+
+    location = [10, 10];
+    orientation = "vertical";
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).not.toThrow();
+
+    location = [-1, -3];
+
+    expect(() => {
+      gameboard.placeShip(ship, location, orientation);
+    }).toThrow();
+  });
+
+  test("That no ships can be placed on top of each other", () => {
+    const ship1 = shipFactory(3);
+    const ship2 = shipFactory(3);
+    const gameboard = gameboardFactory();
+
+    const location1 = [1, 1];
+    const orientation1 = "horizontal";
+
+    const location2 = [1, 1];
+    const orientation2 = "vertical";
+
+    gameboard.placeShip(ship1, location1, orientation1);
+
+    expect(() => {
+      gameboard.placeShip(ship2, location2, orientation2);
+    }).toThrow();
+  });
 });
 
-test("That placement location should be horizontal or vertical", () => {
-  const ship = shipFactory(3);
-  const gameboard = gameboardFactory();
-  let location = [3, 1];
+describe("How the gameboard handles attacks", () => {
+  test("That the gameboard registers a ship hit", () => {
+    const ship = shipFactory(4);
+    const gameboard = gameboardFactory();
 
-  let orientation = "not horizontal"; // invalid orientation
+    const location = [5, 5];
+    const orientation = "horizontal";
 
-  expect(() => {
     gameboard.placeShip(ship, location, orientation);
-  }).toThrow();
+    gameboard.receiveAttack([5, 5]);
 
-  orientation = "verticaal"; // typo
+    expect(ship.getHits()).toBe(1);
+  });
 
-  expect(() => {
+  test("That the gameboard prevents a double hit", () => {
+    const ship = shipFactory(4);
+    const gameboard = gameboardFactory();
+
+    const location = [5, 5];
+    const orientation = "horizontal";
+
     gameboard.placeShip(ship, location, orientation);
-  }).toThrow();
+    gameboard.receiveAttack([5, 5]);
+    gameboard.receiveAttack([5, 5]);
 
-  orientation = "horizontal";
-
-  expect(() => {
-    gameboard.placeShip(ship, location, orientation);
-  }).not.toThrow();
-});
-
-test("That placement location should be within 10x10 grid", () => {
-  const ship = shipFactory(3);
-  const gameboard = gameboardFactory();
-  let location = [0, 1];
-  let orientation = "horizontal";
-
-  expect(() => {
-    gameboard.placeShip(ship, location, orientation);
-  }).toThrow();
-
-  location = [10, 10];
-  orientation = "vertical";
-
-  expect(() => {
-    gameboard.placeShip(ship, location, orientation);
-  }).not.toThrow();
-
-  location = [-1, -3];
-
-  expect(() => {
-    gameboard.placeShip(ship, location, orientation);
-  }).toThrow();
-});
-
-test("That no ships can be placed on top of each other", () => {
-  const ship1 = shipFactory(3);
-  const ship2 = shipFactory(3);
-  const gameboard = gameboardFactory();
-
-  const location1 = [1, 1];
-  const orientation1 = "horizontal";
-
-  const location2 = [1, 1];
-  const orientation2 = "vertical";
-
-  gameboard.placeShip(ship1, location1, orientation1);
-
-  expect(() => {
-    gameboard.placeShip(ship2, location2, orientation2);
-  }).toThrow();
-});
-
-test("That the gameboard registers a ship hit", () => {
-  const ship = shipFactory(4);
-  const gameboard = gameboardFactory();
-
-  const location = [5, 5];
-  const orientation = "horizontal";
-
-  gameboard.placeShip(ship, location, orientation);
-  gameboard.receiveAttack([5, 5]);
-
-  expect(ship.getHits()).toBe(1);
-});
-
-test("That the gameboard prevents a double hit", () => {
-  const ship = shipFactory(4);
-  const gameboard = gameboardFactory();
-
-  const location = [5, 5];
-  const orientation = "horizontal";
-
-  gameboard.placeShip(ship, location, orientation);
-  gameboard.receiveAttack([5, 5]);
-  gameboard.receiveAttack([5, 5]);
-
-  expect(ship.getHits()).toBe(1);
+    expect(ship.getHits()).toBe(1);
+  });
 });
 
 describe("Check if gameboard is finished", () => {
