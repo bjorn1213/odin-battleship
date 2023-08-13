@@ -1,4 +1,6 @@
-export default function playerFactory() {
+export default function playerFactory(playerType) {
+  const playerTypeIsHuman = playerType === "human";
+
   function attack(gameboard, attackCoordinates) {
     // if no coordinates are specified, pick a random unattacked grid point
     if (!attackCoordinates) {
@@ -26,5 +28,9 @@ export default function playerFactory() {
     }
   }
 
-  return { attack };
+  function isHuman() {
+    return playerTypeIsHuman;
+  }
+
+  return { attack, isHuman };
 }

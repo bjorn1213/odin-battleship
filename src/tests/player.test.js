@@ -70,3 +70,20 @@ describe("A player attackig a gameboard", () => {
     );
   });
 });
+
+describe("Player types", () => {
+  test("That a player is human", () => {
+    const player = playerFactory("human");
+    expect(player.isHuman()).toBe(true);
+  });
+
+  test("That a player is a computer by default", () => {
+    const player = playerFactory();
+    expect(player.isHuman()).toBe(false);
+  });
+
+  test("That a player is a computer when passed an argument different than 'human'", () => {
+    const player = playerFactory("zorg");
+    expect(player.isHuman()).toBe(false);
+  });
+});
