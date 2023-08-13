@@ -11,8 +11,8 @@ export default function gameboardFactory() {
   // utility
   function getEndLocation(shipLength, location, orientation) {
     return orientation === HORIZONTAL
-      ? [location[0] + shipLength, location[1]]
-      : [location[0], location[1] - shipLength];
+      ? [location[0] + (shipLength - 1), location[1]]
+      : [location[0], location[1] - (shipLength - 1)];
   }
 
   function getAllCoordinates(shipLength, location, orientation) {
@@ -30,7 +30,7 @@ export default function gameboardFactory() {
     } else {
       let xStart = Math.min(start[0], stop[0]);
       let xStop = Math.max(start[0], stop[0]);
-      let y = start[0];
+      let y = start[1];
 
       for (let x = xStart; x <= xStop; x++) {
         coordinates.push([x, y]);
@@ -112,7 +112,7 @@ export default function gameboardFactory() {
       occupiedCoordinates.push(coordinate);
     }
 
-    ships.push(ship);
+    ships.push({ ship, location, orientation });
   }
 
   function receiveAttack(coordinates) {
@@ -134,7 +134,7 @@ export default function gameboardFactory() {
 
   function isFinished() {
     for (let ship of ships) {
-      if (!ship.isSunk()) {
+      if (!ship.ship.isSunk()) {
         return false;
       }
     }

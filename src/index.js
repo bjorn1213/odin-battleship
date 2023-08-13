@@ -6,7 +6,7 @@ import gameFactory from "./game";
 
 const battleshipGame = gameFactory();
 
-while (!battleshipGame.isGameFinished) {
+while (!battleshipGame.isGameFinished()) {
   battleshipGame.letPlayerTakeTurn();
 }
 

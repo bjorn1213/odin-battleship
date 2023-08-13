@@ -5,26 +5,26 @@ import gameboardFactory from "./gameboard";
 export default function gameFactory() {
   let player1;
   let player2;
-  const players = [player1, player2];
+  let players = [player1, player2];
   let currentPlayerIdx = 0;
 
   function dummyInitialise() {
     const shipPlacements1 = [
-      { ship: shipFactory(1), location: [1, 2], orientation: "horizontal" },
-      { ship: shipFactory(1), location: [9, 5], orientation: "vertical" },
-      { ship: shipFactory(3), location: [4, 7], orientation: "horizontal" },
-      { ship: shipFactory(3), location: [6, 2], orientation: "vertical" },
-      { ship: shipFactory(5), location: [2, 6], orientation: "vertical" },
-      { ship: shipFactory(7), location: [4, 9], orientation: "horizontal" },
+      { ship: shipFactory(1), location: [1, 9], orientation: "horizontal" },
+      { ship: shipFactory(1), location: [9, 6], orientation: "vertical" },
+      { ship: shipFactory(3), location: [4, 4], orientation: "horizontal" },
+      { ship: shipFactory(3), location: [6, 9], orientation: "vertical" },
+      { ship: shipFactory(5), location: [2, 5], orientation: "vertical" },
+      { ship: shipFactory(7), location: [4, 2], orientation: "horizontal" },
     ];
 
     const shipPlacements2 = [
-      { ship: shipFactory(1), location: [1, 2], orientation: "horizontal" },
-      { ship: shipFactory(1), location: [9, 5], orientation: "vertical" },
-      { ship: shipFactory(3), location: [4, 7], orientation: "horizontal" },
-      { ship: shipFactory(3), location: [6, 2], orientation: "vertical" },
-      { ship: shipFactory(5), location: [2, 6], orientation: "vertical" },
-      { ship: shipFactory(7), location: [4, 9], orientation: "horizontal" },
+      { ship: shipFactory(1), location: [1, 9], orientation: "horizontal" },
+      { ship: shipFactory(1), location: [9, 6], orientation: "vertical" },
+      { ship: shipFactory(3), location: [4, 4], orientation: "horizontal" },
+      { ship: shipFactory(3), location: [6, 9], orientation: "vertical" },
+      { ship: shipFactory(5), location: [2, 5], orientation: "vertical" },
+      { ship: shipFactory(7), location: [4, 2], orientation: "horizontal" },
     ];
 
     player1 = {
@@ -52,6 +52,8 @@ export default function gameFactory() {
         placement.orientation
       );
     }
+
+    players = [player1, player2];
   }
 
   function toggleCurrentPlayer() {
@@ -65,10 +67,10 @@ export default function gameFactory() {
   function letPlayerTakeTurn() {
     const activePlayer = players[currentPlayerIdx];
     const nonActivePlayer = players[1 - currentPlayerIdx];
-    if (activePlayer.isHuman()) {
+    if (activePlayer.player.isHuman()) {
       console.log("boring");
     } else {
-      activePlayer.attack(nonActivePlayer.gameboard);
+      activePlayer.player.attack(nonActivePlayer.gameboard);
     }
 
     if (!nonActivePlayer.gameboard.lastAttackWasAHit()) {

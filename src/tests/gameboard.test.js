@@ -167,4 +167,19 @@ describe("Check if gameboard is finished", () => {
 
     expect(gameboard.isFinished()).toBe(true);
   });
+
+  test("That gameboard is finished if there is a ship and its attacked fully 2", () => {
+    const gameboard = gameboardFactory();
+
+    const ship = shipFactory(3);
+    const location = [1, 4];
+    const orientation = "horizontal";
+    gameboard.placeShip(ship, location, orientation);
+
+    gameboard.receiveAttack([1, 4]);
+    gameboard.receiveAttack([2, 4]);
+    gameboard.receiveAttack([3, 4]);
+
+    expect(gameboard.isFinished()).toBe(true);
+  });
 });
