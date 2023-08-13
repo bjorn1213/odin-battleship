@@ -7,7 +7,6 @@ export default function playerFactory() {
       let y;
       let tries = 0;
       let attackTries = [","];
-      console.log("hi!");
       while (!foundCoordinate && tries < 10 * 10) {
         while (attackTries.includes([x, y].toString())) {
           x = 1 + Math.floor(Math.random() * 10);
@@ -15,7 +14,6 @@ export default function playerFactory() {
         }
         attackTries.push([x, y].toString());
         tries++;
-        console.log(tries);
 
         if (!gameboard.coordinateHasBeenAttacked([x, y])) {
           foundCoordinate = true;

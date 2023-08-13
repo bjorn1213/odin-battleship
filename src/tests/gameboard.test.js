@@ -106,3 +106,35 @@ test("That the gameboard prevents a double hit", () => {
 
   expect(ship.getHits()).toBe(1);
 });
+
+describe("Check if gameboard is finished", () => {
+  test("That gameboard is not finished if there is a ship", () => {
+    const ship = shipFactory(4);
+    const gameboard = gameboardFactory();
+
+    const location = [5, 5];
+    const orientation = "horizontal";
+
+    gameboard.placeShip(ship, location, orientation);
+
+    expect(gameboard.isFinished()).toBe(false);
+  });
+
+  test("That gameboard is finished if there is no ship", () => {
+    const gameboard = gameboardFactory();
+
+    expect(gameboard.isFinished()).toBe(true);
+  });
+
+  test("That gameboard is finished if there is a ship and its attacked fully", () => {
+    const gameboard = gameboardFactory();
+
+    const ship = shipFactory(1);
+    const location = [5, 5];
+    const orientation = "horizontal";
+    gameboard.placeShip(ship, location, orientation);
+    gameboard.receiveAttack(location);
+
+    expect(gameboard.isFinished()).toBe(true);
+  });
+});
