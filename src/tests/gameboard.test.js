@@ -109,6 +109,32 @@ describe("How the gameboard handles attacks", () => {
 
     expect(ship.getHits()).toBe(1);
   });
+
+  test("If the gameboard remembers if the last attack was a miss", () => {
+    const ship = shipFactory(4);
+    const gameboard = gameboardFactory();
+
+    const location = [5, 5];
+    const orientation = "horizontal";
+
+    gameboard.placeShip(ship, location, orientation);
+    gameboard.receiveAttack([4, 4]);
+
+    expect(gameboard.lastAttackWasAHit()).toBe(false);
+  });
+
+  test("If the gameboard remembers if the last attack was a hit", () => {
+    const ship = shipFactory(4);
+    const gameboard = gameboardFactory();
+
+    const location = [5, 5];
+    const orientation = "horizontal";
+
+    gameboard.placeShip(ship, location, orientation);
+    gameboard.receiveAttack([6, 5]);
+
+    expect(gameboard.lastAttackWasAHit()).toBe(true);
+  });
 });
 
 describe("Check if gameboard is finished", () => {

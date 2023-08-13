@@ -3,6 +3,7 @@ export default function gameboardFactory() {
   let placements = {};
   let receivedAttacks = [];
   let ships = [];
+  let lastAttackSuccesful = false;
   const HORIZONTAL = "horizontal";
   const VERTICAL = "vertical";
   const validOrientations = [HORIZONTAL, VERTICAL];
@@ -122,8 +123,10 @@ export default function gameboardFactory() {
       return;
     }
     receivedAttacks.push(coordinates);
+    lastAttackSuccesful = false;
 
     if (placements[coordinates]) {
+      lastAttackSuccesful = true;
       const ship = placements[coordinates];
       ship.hit();
     }
@@ -138,5 +141,15 @@ export default function gameboardFactory() {
     return true;
   }
 
-  return { placeShip, receiveAttack, coordinateHasBeenAttacked, isFinished };
+  function lastAttackWasAHit() {
+    return lastAttackSuccesful;
+  }
+
+  return {
+    placeShip,
+    receiveAttack,
+    coordinateHasBeenAttacked,
+    isFinished,
+    lastAttackWasAHit,
+  };
 }
