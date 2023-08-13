@@ -1,8 +1,13 @@
 import "./style.css";
-import shipFactory from "./ship";
-import gameboardFactory from "./gameboard";
+// import shipFactory from "./ship";
+// import gameboardFactory from "./gameboard";
+// import playerFactory from "./player";
+import gameFactory from "./game";
 
-const ship = shipFactory(3);
-const gameboard = gameboardFactory();
+const battleshipGame = gameFactory();
 
-gameboard.placeShip(ship, [1, 1], "horizontal");
+while (!battleshipGame.isGameFinished) {
+  battleshipGame.letPlayerTakeTurn();
+}
+
+console.log(battleshipGame.getWinner());

@@ -5,6 +5,8 @@ import gameboardFactory from "./gameboard";
 export default function gameFactory() {
   let player1;
   let player2;
+  const players = [player1, player2];
+  let currentPlayerIdx = 0;
 
   function dummyInitialise() {
     const shipPlacements1 = [
@@ -27,7 +29,7 @@ export default function gameFactory() {
 
     player1 = {
       player: playerFactory(),
-      gameboard: gameFactory(),
+      gameboard: gameboardFactory(),
     };
 
     for (let placement of shipPlacements1) {
@@ -40,7 +42,7 @@ export default function gameFactory() {
 
     player2 = {
       player: playerFactory(),
-      gameboard: gameFactory(),
+      gameboard: gameboardFactory(),
     };
 
     for (let placement of shipPlacements2) {
@@ -52,7 +54,41 @@ export default function gameFactory() {
     }
   }
 
+  function toggleCurrentPlayer() {
+    currentPlayerIdx = 1 - currentPlayerIdx;
+  }
+
+  function isGameFinished() {
+    return player1.gameboard.isFinished() || player2.gameboard.isFinished();
+  }
+
+  function letPlayerTakeTurn() {
+    const activePlayer = players[currentPlayerIdx];
+    const nonActivePlayer = players[1 - currentPlayerIdx];
+    if (activePlayer.isHuman()) {
+      console.log("boring");
+    } else {
+      activePlayer.attack(nonActivePlayer.gameboard);
+    }
+
+    if (!nonActivePlayer.gameboard.lastAttackWasAHit()) {
+      toggleCurrentPlayer();
+    }
+  }
+
+  function getWinner() {
+    let winner;
+    if (!isGameFinished()) {
+      winner = "Game not yet finished";
+    } else {
+      winner = player1.gameboard.isFinished()
+        ? "Player 2 wins!"
+        : "Player 1 winse!";
+    }
+    return winner;
+  }
+
   dummyInitialise();
 
-  return {};
+  return { isGameFinished, letPlayerTakeTurn, getWinner };
 }
