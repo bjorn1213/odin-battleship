@@ -3,11 +3,13 @@ import "./style.css";
 // import gameboardFactory from "./gameboard";
 // import playerFactory from "./player";
 import gameFactory from "./game";
+import { dummy } from "./DOMModule";
 
 const battleshipGame = gameFactory();
 
-while (!battleshipGame.isGameFinished()) {
-  battleshipGame.letPlayerTakeTurn();
-}
+const gameboard = battleshipGame.getGameboard();
 
-console.log(battleshipGame.getWinner());
+gameboard.receiveAttack([6, 9]);
+gameboard.receiveAttack([7, 9]);
+
+dummy(gameboard);

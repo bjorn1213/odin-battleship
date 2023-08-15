@@ -1,0 +1,56 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.gameboard-container {
+  height: 100%;
+  width: 100%;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+
+.game-board {
+  background-color: black;
+  border: 2px solid black;
+
+  height: 400px;
+  width: 400px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+}
+
+.board-square {
+  height: 100%;
+  width: 100%;
+  background-color: #eaeaea;
+  border-radius: 2px;
+}
+
+.board-square:hover {
+  background-color: #aaaaaa;
+}
+
+.board-square.ship {
+  background-color: black;
+}
+
+.board-square.hit {
+  background-image: url("./img/cross.png");
+  background-size: contain;
+  filter: grayscale(100%);
+}
+
+.board-square.hit.ship {
+  background-image: url("./img/cross.png");
+  background-size: contain;
+  filter: none;
+}

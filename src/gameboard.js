@@ -145,11 +145,18 @@ export default function gameboardFactory() {
     return lastAttackSuccesful;
   }
 
+  function hasShip(coordinates) {
+    if (validCoordinate(coordinates)) {
+      return !!placements[coordinates];
+    }
+  }
+
   return {
     placeShip,
     receiveAttack,
     coordinateHasBeenAttacked,
     isFinished,
     lastAttackWasAHit,
+    hasShip,
   };
 }

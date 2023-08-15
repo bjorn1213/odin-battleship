@@ -92,5 +92,9 @@ export default function gameFactory() {
 
   dummyInitialise();
 
-  return { isGameFinished, letPlayerTakeTurn, getWinner };
+  function getGameboard() {
+    return players[0].gameboard;
+  }
+
+  return { isGameFinished, letPlayerTakeTurn, getWinner, getGameboard };
 }
